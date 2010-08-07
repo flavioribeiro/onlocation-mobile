@@ -7,13 +7,10 @@ Created on 04/08/2010
 import sys
 import cherrypy
 import pgdb
+import os.path
 from cherrytemplate import cherrytemplate, renderTemplate
 
-sys.path.append('src')
 
-conf = {'global':{'server.socket_port': 8084,'log.error_file': "onlocation.log"},
-        'databases':{'driver':'postgres','host':'localhost','port':5432}}
-    
 class OnLocationServer(object):
     
     def __init__(self):
@@ -28,6 +25,16 @@ class OnLocationServer(object):
     def index(self):
         return renderTemplate(file = 'pages/index.html')
     
+    @cherrypy.expose
+    def default(self):
+        return renderTemplate(file = 'pages/index.html')
+
+sys.path.append('src')
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+conf = {'global':{'server.socket_port': 8084,'log.error_file': "onlocation.log"},
+        'databases':{'driver':'postgres','host':'localhost','port':5432},
+        '/geral.css':{'tools.staticfile.on':True,'tools.staticfile.filename':current_dir +'/css/geral.css'}}
+
 cherrypy.root = OnLocationServer()
-cherrypy.config.update(conf)
-cherrypy.quickstart(OnLocationServer())
+cherrypy.quickstart(OnLocationServer(),'/onlocation', config=conf)
