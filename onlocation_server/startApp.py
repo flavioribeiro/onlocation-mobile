@@ -32,7 +32,8 @@ class OnLocationServer(object):
 sys.path.append('src')
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
-conf = {'global':{'server.socket_port': 8084,'log.error_file': "onlocation.log"},
+conf = {'/':{'tools.sessions.on':True,'tools.sessions.timeout':60},
+        'global':{'server.socket_port': 8084,'log.error_file': "onlocation.log"},
         'databases':{'driver':'postgres','host':'localhost','port':5432},
         '/geral.css':{'tools.staticfile.on':True,'tools.staticfile.filename':current_dir +'/css/geral.css'}}
 
